@@ -706,6 +706,11 @@ bool FurnaceGUI::drawSysConf(int chan, DivSystem type, DivConfig& flags, bool mo
       }
 
       ImGui::Text("Chip memory:");
+      //New
+      if (ImGui::RadioButton("No Memory Limit", chipMem == 22)) {
+          chipMem = 22;
+          altered = true;
+      }
       if (ImGui::RadioButton("2MB (ECS/AGA max)",chipMem==21)) {
         chipMem=21;
         altered=true;

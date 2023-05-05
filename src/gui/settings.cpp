@@ -94,6 +94,13 @@ const char* audioQualities[]={
   "Low"
 };
 
+// NEW!!! METRONOME SOUND OPTIONS
+const char* metronomeSound[]={
+    "Classic",
+    "Click",
+    "Wood"
+};
+
 const char* arcadeCores[]={
   "ymfm",
   "Nuked-OPM"
@@ -840,6 +847,13 @@ void FurnaceGUI::drawSettings() {
             if (settings.metroVol>200) settings.metroVol=200;
             e->setMetronomeVol(((float)settings.metroVol)/100.0f);
           }
+          ImGui::Text("Metronome sound");
+          ImGui::SameLine();
+          ImGui::Combo("##MetroSound", &settings.audioQuality, metronomeSound, 3);
+
+          //Need to actually implement a way to actually change the metronome sound...
+          //Currently it just changes the audio quality, hastly put together just to show how the UI would look..
+
 
           bool lowLatencyB=settings.lowLatency;
           if (ImGui::Checkbox("Low-latency mode (experimental!)",&lowLatencyB)) {
