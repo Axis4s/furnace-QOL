@@ -3750,9 +3750,13 @@ bool FurnaceGUI::loop() {
       });
     }
 
+    bool fontsFailed=false;
+
     layoutTimeBegin=SDL_GetPerformanceCounter();
 
-    ImGui_ImplSDLRenderer_NewFrame();
+    if (!ImGui_ImplSDLRenderer_NewFrame()) {
+      fontsFailed=true;
+    }
     ImGui_ImplSDL2_NewFrame(sdlWin);
     ImGui::NewFrame();
 
@@ -5792,6 +5796,18 @@ bool FurnaceGUI::loop() {
       willCommit=false;
     }
 
+    if (fontsFailed) {
+      showError("it appears I couldn't load these fonts. any setting you can check?");
+      logE("couldn't load fonts");
+      ImGui::GetIO().Fonts->Clear();
+      mainFont=ImGui::GetIO().Fonts->AddFontDefault();
+      patFont=mainFont;
+      ImGui_ImplSDLRenderer_DestroyFontsTexture();
+      if (!ImGui::GetIO().Fonts->Build()) {
+        logE("error again while building font atlas!");
+      }
+    }
+
     if (!editOptsVisible) {
       latchTarget=0;
       latchNibble=false;
@@ -6719,6 +6735,7 @@ FurnaceGUI::FurnaceGUI():
   sampleDragMode(false),
   sampleDrag16(false),
   sampleZoomAuto(true),
+  sampleSelTarget(0),
   sampleDragTarget(NULL),
   sampleDragStart(0,0),
   sampleDragAreaSize(0,0),
